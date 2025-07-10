@@ -338,6 +338,7 @@ class Coder:
         file_watcher=None,
         auto_copy_context=False,
         auto_accept_architect=True,
+        clear_on_interrupt=False,
     ):
         # Fill in a dummy Analytics if needed, but it is never .enable()'d
         self.analytics = analytics if analytics is not None else Analytics()
@@ -352,6 +353,7 @@ class Coder:
 
         self.auto_copy_context = auto_copy_context
         self.auto_accept_architect = auto_accept_architect
+        self.clear_on_interrupt = clear_on_interrupt
 
         self.ignore_mentions = ignore_mentions
         if not self.ignore_mentions:
@@ -1496,6 +1498,9 @@ class Coder:
                     continue
                 except KeyboardInterrupt:
                     interrupted = True
+                    if self.clear_on_interrupt and self.cur_messages:
+                        self.io.tool_output(f"Message has been cleared from history")
+                        self.cur_messages = []
                     break
                 except FinishReasonLength:
                     # We hit the output limit!
