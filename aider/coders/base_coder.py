@@ -1498,9 +1498,10 @@ class Coder:
                     continue
                 except KeyboardInterrupt:
                     interrupted = True
-                    if self.clear_on_interrupt and self.cur_messages:
+                    if self.clear_on_interrupt:
                         self.io.tool_output(f"Message has been cleared from history")
                         self.cur_messages = []
+                        return
                     break
                 except FinishReasonLength:
                     # We hit the output limit!
