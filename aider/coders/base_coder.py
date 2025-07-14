@@ -1421,9 +1421,6 @@ class Coder:
     def send_message(self, inp):
         self.event("message_send_starting")
 
-        # Notify IO that LLM processing is starting
-        self.io.llm_started()
-
         # Check if we need to clear old messages
         if (self.main_model.max_done_messages > 0 and 
             len(self.done_messages) >= self.main_model.max_done_messages):
@@ -1431,6 +1428,9 @@ class Coder:
                 f"Chat history has {len(self.done_messages)} messages (max is {self.main_model.max_done_messages}). Clear old messages?"
             ):
                 self.done_messages = []
+
+        # Notify IO that LLM processing is starting
+        self.io.llm_started()
 
         self.cur_messages += [
             dict(role="user", content=inp),
