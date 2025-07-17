@@ -347,9 +347,14 @@ class GitRepo:
                 else:
                     current_system_content = system_content
 
+                if model.commit_prompt_prefix:
+                    current_content = model.commit_prompt_prefix + "\n" + content
+                else:
+                    current_content = content
+
                 messages = [
                     dict(role="system", content=current_system_content),
-                    dict(role="user", content=content),
+                    dict(role="user", content=current_content),
                 ]
 
                 num_tokens = model.token_count(messages)
